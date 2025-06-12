@@ -1,66 +1,35 @@
 # Axispose
 
+### Environment
+To set up the required environment, run the following commands：
 ```
 pip install diffusers torch accelerate
-```
-
-```
 pip install transformers
 ```
 
-
-### Train a model
-Training is exactly the same as DDPM with the following:
+### Model Inference
 ```
-python main.py --config {DATASET}.yml --exp {PROJECT_PATH} --doc {MODEL_NAME} --ni
-```
-
-### Sampling from the model
-
-#### Sampling from the generalized model for FID evaluation
-```
-python main.py --config {DATASET}.yml --exp {PROJECT_PATH} --doc {MODEL_NAME} --sample --fid --timesteps {STEPS} --eta {ETA} --ni
+python main.py --config {DATASET}.yml --exp {PROJECT_PATH} --doc {MODEL_NAME} --sample --fid --timesteps 1000 --eta 0 --ni
 ```
 where 
-- `ETA` controls the scale of the variance (0 is DDIM, and 1 is one type of DDPM).
 - `STEPS` controls how many timesteps used in the process.
 - `MODEL_NAME` finds the pre-trained checkpoint according to its inferred path.
 
-If you want to use the DDPM pretrained model:
-```
-python main.py --config {DATASET}.yml --exp {PROJECT_PATH} --use_pretrained --sample --fid --timesteps {STEPS} --eta {ETA} --ni
-```
-the `--use_pretrained` option will automatically load the model according to the dataset.
-
-We provide a CelebA 64x64 model [here](https://drive.google.com/file/d/1R_H-fJYXSH79wfSKs9D-fuKQVan5L-GR/view?usp=sharing), and use the DDPM version for CIFAR10 and LSUN.
-
-If you want to use the version with the larger variance in DDPM: use the `--sample_type ddpm_noisy` option.
-
-#### Sampling from the model for image inpainting 
-Use `--interpolation` option instead of `--fid`.
-
-#### Sampling from the sequence of images that lead to the sample
-Use `--sequence` option instead.
-
-The above two cases contain some hard-coded lines specific to producing the image, so modify them according to your needs.
-
+We provide a pretrained model and some test images ([here](https://pan.baidu.com/s/1vHRCJRdTW4xTADf5x-PikQ?pwd=i68v)) for evaluation.
 
 ## References and Acknowledgements
+If you use this work in your research, please cite:
 ```
-@article{song2020denoising,
-  title={Denoising Diffusion Implicit Models},
-  author={Song, Jiaming and Meng, Chenlin and Ermon, Stefano},
-  journal={arXiv:2010.02502},
-  year={2020},
-  month={October},
-  abbr={Preprint},
-  url={https://arxiv.org/abs/2010.02502}
+@article{zou2025axispose,
+  title={AxisPose: Model-Free Matching-Free Single-Shot 6D Object Pose Estimation via Axis Generation},
+  author={Zou, Yang and Qi, Zhaoshuai and Liu, Yating and Xu, Zihao and Sun, Weipeng and Liu, Weiyi and Li, Xingyuan and Yang, Jiaqi and Zhang, Yanning},
+  journal={arXiv preprint arXiv:2503.06660},
+  year={2025}
 }
 ```
 
-
 This implementation is based on / inspired by:
 
-- [https://github.com/hojonathanho/diffusion](https://github.com/hojonathanho/diffusion) (the DDPM TensorFlow repo), 
+- [https://github.com/ermongroup/ddim](https://github.com/ermongroup/ddim) (the DDIM TensorFlow repo), 
 - [https://github.com/pesser/pytorch_diffusion](https://github.com/pesser/pytorch_diffusion) (PyTorch helper that loads the DDPM model), and
 - [https://github.com/ermongroup/ncsnv2](https://github.com/ermongroup/ncsnv2) (code structure).
