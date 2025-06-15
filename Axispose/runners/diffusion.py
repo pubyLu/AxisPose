@@ -14,7 +14,7 @@ from models.diffusion import Model
 from models.ema import EMAHelper
 from functions import get_optimizer
 from functions.losses import loss_registry
-from datasets import get_dataset, data_transform, inverse_data_transform, Projection
+from datasets import get_dataset, data_transform, inverse_data_transform, Projection, ProjectionSample
 from datasets.projectionTest import ProjectionTest
 from datasets.projectionLinmod import ProjectionLinemod
 from functions.ckpt_util import get_ckpt_path
@@ -226,7 +226,7 @@ class Diffusion(object):
         else:
             raise NotImplementedError("Sample procedeure not defined")
 
-    def sample_fid_ours(self, model):
+    def sample_fid_ours_old(self, model):
         config = self.config
         testDatasetPath = "./example_ycbv/test.txt"
         img_size = 128
@@ -277,6 +277,51 @@ class Diffusion(object):
                         x[i], os.path.join(save_dir, f"{names[i]}_inf.png")
                     )
 
+    def sample_fid_ours(self, model):
+    config = self.config
+    # testDatasetPath = "./example_ycbv/test.txt"
+    testDatasetPath = "./sample/"
+    img_size = 128
+    # test_dataset = ProjectionLinemod(testDatasetPath, img_size, img_size, transforms=None) # linemod dataset
+    test_dataset = ProjectionSample(testDatasetPath, img_size, img_size, transforms=None) # ycbv dataset
+    
+    test_loader = data.DataLoader(
+        test_dataset,
+        batch_size=32,
+        shuffle=True,
+        num_workers=config.data.num_workers,
+    )
+
+    # 获取当前文件的绝对路径
+    current_file_path = os.path.abspath(__file__)
+
+    # 获取当前文件所在的目录
+    current_directory = os.path.dirname(current_file_path)
+
+    # 在指定位置打印当前文件所在的目录
+    # print("当前文件所在的目录是:", current_directory)
+    with torch.no_grad():
+        for idx, (axis_masks, rgbs, names) in enumerate(test_loader):
+            
+            n = axis_masks.size(0)
+            x = torch.randn(
+                n,
+                config.data.channels,
+                config.data.image_size,
+                config.data.image_size,
+                device=self.device,
+            )
+            rgbs = rgbs.to('cuda')
+            input = torch.cat([x, rgbs], dim=1)
+            x = self.sample_image(input, model)
+            x = inverse_data_transform(config, x)
+            for i in range(n):
+                save_dir = os.path.join('./sample/result')
+                if not os.path.exists(save_dir):
+                    os.makedirs(save_dir)
+                tvu.save_image(
+                    x[i], os.path.join(save_dir, f"{names[i]}_inf.png")
+                )
 
     def sample_fid(self, model):
         config = self.config
