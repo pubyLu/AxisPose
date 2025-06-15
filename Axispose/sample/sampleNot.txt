@@ -1,0 +1,1 @@
+To sample axispose model, please put rgb folder and mask folder here. The inference result of our model will be saved here.
