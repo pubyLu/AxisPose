@@ -10,7 +10,7 @@ from datasets.lsun import LSUN
 from torch.utils.data import Subset
 import numpy as np
 
-from datasets.projection import Projection
+from datasets.projection import Projection, ProjectionSample
 class Crop(object):
     def __init__(self, x1, x2, y1, y2):
         self.x1 = x1
