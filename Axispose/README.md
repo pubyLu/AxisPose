@@ -15,7 +15,7 @@ where
 - `STEPS` controls how many timesteps used in the process.
 - `MODEL_NAME` finds the pre-trained checkpoint according to its inferred path.
 
-We provide a pretrained model and some test images ([here](https://pan.baidu.com/s/1vHRCJRdTW4xTADf5x-PikQ?pwd=i68v)) for evaluation.
+We provide a pretrained model and some test images ([here](https://pan.baidu.com/s/1vHRCJRdTW4xTADf5x-PikQ?pwd=i68v)) for evaluation. Note: Put the checkpoint file under "./weight/", and put test images (RGB & Mask) under "./sample/". 
 
 ## References and Acknowledgements
 If you use this work in your research, please cite:
