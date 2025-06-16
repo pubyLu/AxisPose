@@ -1,0 +1,1 @@
+put rgb folder and mask folder here, the inference result of our model will be saved here. 
