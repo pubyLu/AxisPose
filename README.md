@@ -3,11 +3,11 @@
 ### Environment
 To set up the required environment, run the following commands：
 ```
-pip install diffusers torch accelerate
-pip install transformers
+pip install -r requirment.txt
 ```
 
 ### Model Inference
+We use GPU A100-40G with CUDA 12.2 to train and test our model. To sample our pretrained model, run the following commands:
 ```
 python main.py --config {DATASET}.yml --exp {PROJECT_PATH} --doc {MODEL_NAME} --sample --fid --timesteps 1000 --eta 0 --ni
 ```
